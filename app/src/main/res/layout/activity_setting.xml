@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.SettingActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/BaseToolbar"
+        app:title="设置" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:text="自定义采集选择" />
+
+    <RadioGroup
+        android:id="@+id/rg_camera_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_camera1"
+            style="@style/MeetingCreateRadioButtonStyle"
+            android:checked="true"
+            android:text="Camera1" />
+
+        <RadioButton
+            android:id="@+id/rb_camera2"
+            style="@style/MeetingCreateRadioButtonStyle"
+            android:text="Camera2" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="30dp"
+        android:text="渲染选择" />
+
+    <RadioGroup
+        android:id="@+id/rg_render"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_sdk"
+            style="@style/MeetingCreateRadioButtonStyle"
+            android:checked="true"
+            android:text="SDK渲染" />
+
+        <RadioButton
+            android:id="@+id/rb_custom"
+            style="@style/MeetingCreateRadioButtonStyle"
+            android:text="自定义渲染" />
+    </RadioGroup>
+
+</LinearLayout>
