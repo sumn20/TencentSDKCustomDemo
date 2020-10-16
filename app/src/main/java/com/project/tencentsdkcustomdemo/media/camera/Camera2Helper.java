@@ -83,7 +83,7 @@ public class Camera2Helper implements CameraInterface {
         if (mCameraDevice != null) {
             return;
         }
-        Log.e("SUMN","Camera2Helper");
+        Log.e(TAG,"Camera2Helper");
         startBackgroundThread();
         openCamera();
     }

@@ -5,6 +5,9 @@ import android.graphics.Point;
 import android.graphics.SurfaceTexture;
 import android.util.Size;
 
+/**
+ * Camera1和Camera2实现切换
+ */
 public class CameraBuilder {
     public enum CameraType {
         Camera1,

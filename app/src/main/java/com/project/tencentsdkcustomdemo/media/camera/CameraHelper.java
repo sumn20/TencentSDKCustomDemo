@@ -32,7 +32,7 @@ public class CameraHelper implements CameraInterface {
 
     @Override
     public void start() {
-        Log.e("SUMN","Camera1Helper");
+        Log.e(TAG,"Camera1Helper");
         startCamera(specificCameraId);
     }
 
