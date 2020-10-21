@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.TextureView;
 import android.widget.Button;
 
 import com.project.tencentsdkcustomdemo.R;
 import com.project.tencentsdkcustomdemo.constants.Constant;
 import com.project.tencentsdkcustomdemo.constants.GenerateTestUserSig;
+import com.project.tencentsdkcustomdemo.media.audio.RecordConfig;
+import com.project.tencentsdkcustomdemo.media.audio.RecordHelper;
 import com.project.tencentsdkcustomdemo.media.camera.CameraBuilder;
 import com.project.tencentsdkcustomdemo.media.egl.CameraEglSurfaceView;
 import com.project.tencentsdkcustomdemo.render.TestRenderVideoFrame;
@@ -107,8 +110,11 @@ public class CustomAnchorActivity extends BaseActivity {
         mTRTCParams.role = mRoleType;
         /// userSig是进入房间的用户签名，相当于密码（这里生成的是测试签名，正确做法需要业务服务器来生成，然后下发给客户端）
         mTRTCParams.userSig = GenerateTestUserSig.genTestUserSig(mTRTCParams.userId);
-        // 开启本地声音采集并上行
-        mTRTCCloud.startLocalAudio();
+       /* // 开启本地声音采集并上行
+        mTRTCCloud.startLocalAudio();*/
+        //设置16k采样率
+        mTRTCCloud.setAudioQuality(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
+        mTRTCCloud.enableCustomAudioCapture(true);
         mTRTCCloud.enableCustomVideoCapture(true);
         //美颜测试
         TXBeautyManager beautyManager = mTRTCCloud.getBeautyManager();
@@ -124,8 +130,15 @@ public class CustomAnchorActivity extends BaseActivity {
         encParam.videoBitrate = 2000;
         encParam.videoResolutionMode = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_MODE_PORTRAIT;
         mTRTCCloud.setVideoEncoderParam(encParam);
-
         mTRTCCloud.enterRoom(mTRTCParams, TRTC_APP_SCENE_LIVE);
+        customVideo();
+        customVoice();
+    }
+
+    /*
+    视频自定义采集
+     */
+    private void customVideo() {
         cameraEglSurfaceView.setVideoFrameReadListener(frame -> {
             TRTCCloudDef.TRTCVideoFrame videoFrame = new TRTCCloudDef.TRTCVideoFrame();
             videoFrame.texture = new TRTCCloudDef.TRTCTexture();
@@ -146,6 +159,29 @@ public class CustomAnchorActivity extends BaseActivity {
         mCustomRender.start(textureView);
     }
 
+    /**
+     * 音频自定义采集
+     */
+    private void customVoice() {
+        RecordConfig config = new RecordConfig();
+        RecordHelper.getInstance().setRecordDataListener(data -> {
+            //给队列添加PCM音频数据包
+
+            TRTCCloudDef.TRTCAudioFrame trtcAudioFrame = new TRTCCloudDef.TRTCAudioFrame();
+            //音频数据
+            trtcAudioFrame.data = data;
+            //声道数
+            trtcAudioFrame.channel = RecordHelper.getInstance().getCurrentConfig().getChannelCount();
+            //采样率
+            trtcAudioFrame.sampleRate = RecordHelper.getInstance().getCurrentConfig().getSampleRate();
+            if (mTRTCCloud != null) {
+
+                mTRTCCloud.sendCustomAudioData(trtcAudioFrame);
+            }
+        });
+        //开始录音
+        RecordHelper.getInstance().start(config);
+    }
 
     @Override
     protected void onDestroy() {

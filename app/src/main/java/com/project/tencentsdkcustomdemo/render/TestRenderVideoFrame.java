@@ -152,7 +152,7 @@ public class TestRenderVideoFrame implements TRTCCloudListener.TRTCVideoRenderLi
      */
     @Override
     public void onRenderVideoFrame(String userId, int streamType, final TRTCCloudDef.TRTCVideoFrame frame) {
-        Log.e(TAG,"onRenderVideoFrame"+frame.width+":"+frame.height+"streamType"+streamType);
+        //Log.e(TAG,"onRenderVideoFrame"+frame.width+":"+frame.height+"streamType"+streamType);
         if (!userId.equals(mUserId) || mSteamType != streamType) {
             // 如果渲染回调的id或者steamtype对不上
             return;
