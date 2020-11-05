@@ -11,7 +11,10 @@ import com.project.tencentsdkcustomdemo.constants.Constant;
 import com.project.tencentsdkcustomdemo.utils.SPUtils;
 
 import androidx.appcompat.widget.Toolbar;
-
+/**
+ * junker 分支新增说明
+ * 夏雷是我大哥（本来我想写"夏雷我爱你"，但是他说恶心不让我写）
+ */
 public class SettingActivity extends BaseActivity {
 
     public static void openActivity(Activity activity) {
