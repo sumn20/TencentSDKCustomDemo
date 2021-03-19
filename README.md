@@ -22,7 +22,7 @@
 
  render包---自定义渲染关键代码  
 
- - [TestRenderVideoFrame.java](https://github.com/sumn20/TencentSDKCustomDemo/blob/master/app/src/main/java/com/project/tencentsdkcustomdemo/render/TestRenderVideoFrame.java)
+ - [TRTCRenderVideoFrame.java](https://github.com/sumn20/TencentSDKCustomDemo/blob/master/app/src/main/java/com/project/tencentsdkcustomdemo/render/TRTCRenderVideoFrame.java)
 
 
 #### 实现参考
