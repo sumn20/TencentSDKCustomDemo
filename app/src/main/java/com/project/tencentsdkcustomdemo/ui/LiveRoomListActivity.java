@@ -62,6 +62,11 @@ public class LiveRoomListActivity extends BaseActivity implements LiveRoomManage
                 mLiveRoomManager.createLiveRoom();
             }
         });
+        findViewById(R.id.bt_enter_liveplayer).setOnClickListener(view -> {
+            if (checkPermission()) {
+                CustomLivePlayerActivity.openActivity(LiveRoomListActivity.this);
+            }
+        });
         findViewById(R.id.ic_setting).setOnClickListener(view -> {
             SettingActivity.openActivity(this);
         });

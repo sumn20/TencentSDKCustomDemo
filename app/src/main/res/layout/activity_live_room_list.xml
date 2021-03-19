@@ -43,7 +43,7 @@
         android:layout_height="0dp"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp"
-        app:layout_constraintBottom_toTopOf="@id/bt_enter_live"
+        app:layout_constraintBottom_toTopOf="@id/bt_enter_liveplayer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -63,7 +63,19 @@
         android:layout_margin="20dp"
         android:background="@drawable/shape_button_background"
         android:backgroundTint="@color/colorPrimary"
-        android:text="创建直播"
+        android:text="TRTC创建直播"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
+        android:id="@+id/bt_enter_liveplayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/shape_button_background"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="移动直播"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toTopOf="@id/bt_enter_live" />
 </androidx.constraintlayout.widget.ConstraintLayout>
