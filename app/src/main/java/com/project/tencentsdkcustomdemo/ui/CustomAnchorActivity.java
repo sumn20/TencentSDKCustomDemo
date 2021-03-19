@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.TextureView;
 import android.widget.Button;
 
@@ -15,7 +14,7 @@ import com.project.tencentsdkcustomdemo.media.audio.RecordConfig;
 import com.project.tencentsdkcustomdemo.media.audio.RecordHelper;
 import com.project.tencentsdkcustomdemo.media.camera.CameraBuilder;
 import com.project.tencentsdkcustomdemo.media.egl.CameraEglSurfaceView;
-import com.project.tencentsdkcustomdemo.render.TestRenderVideoFrame;
+import com.project.tencentsdkcustomdemo.render.TRTCRenderVideoFrame;
 import com.project.tencentsdkcustomdemo.utils.SPUtils;
 import com.tencent.liteav.beauty.TXBeautyManager;
 import com.tencent.rtmp.ui.TXCloudVideoView;
@@ -152,7 +151,7 @@ public class CustomAnchorActivity extends BaseActivity {
 
         });
         //自定义采集+SDK美颜测试
-        TestRenderVideoFrame mCustomRender = new TestRenderVideoFrame(mUserId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+        TRTCRenderVideoFrame mCustomRender = new TRTCRenderVideoFrame(mUserId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
         mTRTCCloud.setLocalVideoRenderListener(TRTCCloudDef.TRTC_VIDEO_PIXEL_FORMAT_Texture_2D, TRTCCloudDef.TRTC_VIDEO_BUFFER_TYPE_TEXTURE, mCustomRender);
         TextureView textureView = new TextureView(this);
         mLocalPreviewView.addVideoView(textureView);

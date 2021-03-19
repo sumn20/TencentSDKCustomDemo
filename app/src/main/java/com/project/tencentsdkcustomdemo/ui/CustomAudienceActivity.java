@@ -3,14 +3,13 @@ package com.project.tencentsdkcustomdemo.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.TextureView;
 import android.widget.Toast;
 
 import com.project.tencentsdkcustomdemo.R;
 import com.project.tencentsdkcustomdemo.constants.Constant;
 import com.project.tencentsdkcustomdemo.constants.GenerateTestUserSig;
-import com.project.tencentsdkcustomdemo.render.TestRenderVideoFrame;
+import com.project.tencentsdkcustomdemo.render.TRTCRenderVideoFrame;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.tencent.trtc.TRTCCloud;
 import com.tencent.trtc.TRTCCloudDef;
@@ -35,7 +34,7 @@ public class CustomAudienceActivity extends BaseActivity {
     private String mRoomId;
     // 用户Id
     private String mUserId;
-    private TestRenderVideoFrame mCustomRender;
+    private TRTCRenderVideoFrame mCustomRender;
 
     public static void openActivity(Activity activity, String roomId) {
         Intent intent = new Intent(activity, CustomAudienceActivity.class);
@@ -73,7 +72,7 @@ public class CustomAudienceActivity extends BaseActivity {
                 mRoleType = intent.getIntExtra(Constant.ROLE_TYPE, 0);
             }
         }
-        mCustomRender = new TestRenderVideoFrame(mRoomId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+        mCustomRender = new TRTCRenderVideoFrame(mRoomId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
 
         // SDK 参数
         TRTCCloudDef.TRTCParams mTRTCParams = new TRTCCloudDef.TRTCParams();

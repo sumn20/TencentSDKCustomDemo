@@ -2,7 +2,7 @@ package com.project.tencentsdkcustomdemo.render;
 
 /***********************************************************************************************************************
  *
- *                 测试自定义渲染功能 TestRenderVideoFrame
+ *                 测试自定义渲染功能 TRTCRenderVideoFrame
  *
  *  该示例代码通过 openGL 将 SDK 回调出来的视频帧渲染到系统的 TextureView 上。
  *
@@ -52,8 +52,8 @@ import java.nio.FloatBuffer;
 import java.util.concurrent.CountDownLatch;
 
 @TargetApi(17)
-public class TestRenderVideoFrame implements TRTCCloudListener.TRTCVideoRenderListener, Handler.Callback {
-    public static final String TAG = "TestRenderVideoFrame";
+public class TRTCRenderVideoFrame implements TRTCCloudListener.TRTCVideoRenderListener, Handler.Callback {
+    public static final String TAG = "TRTCRenderVideoFrame";
 
     private static final int MSG_RENDER = 2;
     private static final int MSG_DESTROY = 3;
@@ -77,7 +77,7 @@ public class TestRenderVideoFrame implements TRTCCloudListener.TRTCVideoRenderLi
     private String mUserId;
     private int mSteamType;
 
-    public TestRenderVideoFrame(String userId, int steamType) {
+    public TRTCRenderVideoFrame(String userId, int steamType) {
         mUserId = userId;
         mSteamType = steamType;
         mGLCubeBuffer = ByteBuffer.allocateDirect(OpenGlUtils.CUBE.length * 4)
@@ -91,7 +91,7 @@ public class TestRenderVideoFrame implements TRTCCloudListener.TRTCVideoRenderLi
         mGLThread = new HandlerThread(TAG);
         mGLThread.start();
         mGLHandler = new GLHandler(mGLThread.getLooper(), this);
-        Log.i(TAG, "TestRenderVideoFrame");
+        Log.i(TAG, "TRTCRenderVideoFrame");
     }
 
     public void start(TextureView videoView) {
