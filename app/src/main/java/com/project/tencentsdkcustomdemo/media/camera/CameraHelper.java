@@ -46,6 +46,7 @@ public class CameraHelper implements CameraInterface {
     }
 
     private void startCamera(int cameraId) {
+        Log.d("SUMN",cameraId+"");
         try {
             camera = Camera.open(cameraId);
             camera.setPreviewTexture(mSurfaceTexture);
@@ -53,9 +54,11 @@ public class CameraHelper implements CameraInterface {
             Camera.Parameters parameters = camera.getParameters();
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
             parameters.setPreviewFormat(ImageFormat.NV21);
-
-            //设置对焦模式
-            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            if (cameraId==0){
+                //某些机型不支持前置摄像头设置对焦，导致会崩溃
+                //设置对焦模式
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+            }
         /*    parameters.setPreviewSize(previewSize.getWidth(), previewSize.getHeight());*/
             Camera.Size size = findBestSizeValue(parameters.getSupportedPreviewSizes(), previewSize.getWidth(), previewSize.getHeight(), 0.1f);
            parameters.setPictureSize(size.width, size.height);
