@@ -15,6 +15,21 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+afterEvaluate {
+    publishing {
+        // 当前依赖库的版本号，方便我们开发者自己查看，同时发布到 MavenLocal 也是用的这个版本号（Jitpack不会使用到）
+        def versionName = "1.0.2"
+        publications {
+            productionRelease(MavenPublication) {
+                //from components.productionRelease // 表示发布 release（Jitpack不会使用到）
+                // 自定义属性
+                groupId = 'com.trtc.customcamera' // 依赖库的 Group Id（Jitpack不会使用到）
+                artifactId = 'CustomCamera' // 依赖库的名称，单组件发布时随意填写，多组件时即为此组件的 ArtifactId（Jitpack不会使用到）
+                version = versionName
+            }
+        }
+    }
+}
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
