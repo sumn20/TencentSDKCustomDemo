@@ -14,6 +14,9 @@ android {
             abiFilters "armeabi-v7a"
         }
     }
+    lintOptions {
+        abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -44,4 +47,5 @@ dependencies {
     implementation 'com.tencent.liteav:LiteAVSDK_Professional:latest.release'
     //implementation 'com.tencent.liteav:LiteAVSDK_Smart:latest.release'
     implementation project(':CustomCamera')
+   // implementation 'com.github.sumn20:TencentSDKCustomDemo:1.0'
 }
