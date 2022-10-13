@@ -33,7 +33,7 @@ public class CustomLivePlayerActivity extends BaseActivity {
         mTXCloudVideoView = findViewById(R.id.trtc_tc_cloud_view_main);
         mTXLivePlayer = new TXLivePlayer(this);
         mTXLivePlayer.setRenderMode(TXLiveConstants.RENDER_ROTATION_LANDSCAPE);
-        mTXLivePlayer.startPlay(playerUrl, TXLivePlayer.PLAY_TYPE_LIVE_FLV);
+        mTXLivePlayer.startLivePlay(playerUrl, TXLivePlayer.PLAY_TYPE_LIVE_FLV);
         liveRenderVideoFrame = new LiveRenderVideoFrame();
         mTXLivePlayer.setVideoRenderListener(liveRenderVideoFrame, null);
         TextureView textureView = new TextureView(this);

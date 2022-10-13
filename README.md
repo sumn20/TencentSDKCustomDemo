@@ -10,23 +10,30 @@
 如果您是用在游戏开发中，或者需要在自己的界面引擎中嵌入 TRTC SDK，那么就要自己渲染视频画面。
 
 #### 内容实现
-项目实现了camera1和camera2的自定义采集实现,使用SurfaceTexture实现自定义渲染
+项目实现了camera1和camera2的自定义采集实现
 
 
-#### 介绍
+#### 介绍使用
 
- media包---自定义采集关键代码
+```java
 
- - [CameraHelper.java](https://github.com/sumn20/TencentSDKCustomDemo/blob/master/app/src/main/java/com/project/tencentsdkcustomdemo/media/camera/CameraHelper.java)  
-    ---基于camera1的自定义摄像头采集实现
+ mCustomCameraCapture = new CameraBuilder(this).setCameraID(cameraID).setCameraType(cameraType == Constant.CAMERA_1 ? CameraBuilder.CameraType.Camera1 : CameraBuilder.CameraType.Camera2).build();
+        mCustomCameraCapture.startCameraCapture((eglContext, textureId, width, height) -> {
+            TRTCCloudDef.TRTCVideoFrame videoFrame = new TRTCCloudDef.TRTCVideoFrame();
+            videoFrame.texture = new TRTCCloudDef.TRTCTexture();
+            videoFrame.texture.textureId = textureId;
+            videoFrame.texture.eglContext14 = eglContext;
+            videoFrame.width = width;
+            videoFrame.height = height;
+            videoFrame.pixelFormat = TRTCCloudDef.TRTC_VIDEO_PIXEL_FORMAT_Texture_2D;
+            videoFrame.bufferType = TRTCCloudDef.TRTC_VIDEO_BUFFER_TYPE_TEXTURE;
+            if (mTRTCCloud != null)
+                mTRTCCloud.sendCustomVideoData(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, videoFrame);
+        });
+```
 
- - [Camera2Helper.java](https://github.com/sumn20/TencentSDKCustomDemo/blob/master/app/src/main/java/com/project/tencentsdkcustomdemo/media/camera/Camera2Helper.java)  
-    ---基于camera2的自定义摄像头采集实现
 
- render包---自定义渲染关键代码  
-
- - [TRTCRenderVideoFrame.java](https://github.com/sumn20/TencentSDKCustomDemo/blob/master/app/src/main/java/com/project/tencentsdkcustomdemo/render/TRTCRenderVideoFrame.java)
-
+ 
 
 #### 实现参考
 

@@ -43,4 +43,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.tencent.liteav:LiteAVSDK_Professional:latest.release'
     //implementation 'com.tencent.liteav:LiteAVSDK_Smart:latest.release'
+    implementation project(':CustomCamera')
 }

@@ -2,7 +2,7 @@ package com.project.tencentsdkcustomdemo.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
+
 import android.os.Bundle;
 import android.view.TextureView;
 import android.widget.Button;
@@ -12,14 +12,13 @@ import com.project.tencentsdkcustomdemo.constants.Constant;
 import com.project.tencentsdkcustomdemo.constants.GenerateTestUserSig;
 import com.project.tencentsdkcustomdemo.media.audio.RecordConfig;
 import com.project.tencentsdkcustomdemo.media.audio.RecordHelper;
-import com.project.tencentsdkcustomdemo.media.camera.CameraBuilder;
-import com.project.tencentsdkcustomdemo.media.egl.CameraEglSurfaceView;
 import com.project.tencentsdkcustomdemo.render.TRTCRenderVideoFrame;
 import com.project.tencentsdkcustomdemo.utils.SPUtils;
-import com.tencent.liteav.beauty.TXBeautyManager;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.tencent.trtc.TRTCCloud;
 import com.tencent.trtc.TRTCCloudDef;
+import com.trtc.customcamera.capture.CameraBuilder;
+import com.trtc.customcamera.capture.CameraCapture;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -40,9 +39,10 @@ public class CustomAnchorActivity extends BaseActivity {
     private String mUserId;
 
     protected LiveRoomManager mLiveRoomManager;
-    private CameraEglSurfaceView cameraEglSurfaceView;
     private TXCloudVideoView mLocalPreviewView;
     private Button mLiveBtnSwitchCamera;
+    private CameraCapture mCustomCameraCapture;
+    private int cameraID = 0;
 
     public static void openActivity(Activity activity, String roomId) {
         Intent intent = new Intent(activity, CustomAnchorActivity.class);
@@ -81,19 +81,18 @@ public class CustomAnchorActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("自定义采集" + mRoomId);
         bindToolbarWithBack(toolbar);
-        cameraEglSurfaceView = findViewById(R.id.CameraEglSurfaceView);
         mLocalPreviewView = findViewById(R.id.trtc_tc_cloud_view_main);
         mLiveBtnSwitchCamera = findViewById(R.id.live_btn_switch_camera);
         mLiveBtnSwitchCamera.setOnClickListener(view -> {
-            cameraEglSurfaceView.switchCamera();
-            if (CameraBuilder.CAMERA_ID_BACK.equals(cameraEglSurfaceView.getSpecificCameraId())) {
+            if (cameraID == 0) {
+                cameraID = 1;
                 mLiveBtnSwitchCamera.setBackgroundResource(R.mipmap.live_camera_back);
             } else {
+                cameraID = 0;
                 mLiveBtnSwitchCamera.setBackgroundResource(R.mipmap.live_camera_front);
             }
+            mCustomCameraCapture.changeCameraID(cameraID);
         });
-        int cameraType = SPUtils.getInstance(this).getInt(Constant.CAMERA_TYPE, Constant.CAMERA_1);
-        cameraEglSurfaceView.changeCameraInterface(cameraType == Constant.CAMERA_1 ? CameraBuilder.CameraType.Camera1 : CameraBuilder.CameraType.Camera2);
         enterRoom();
 
 
@@ -114,14 +113,7 @@ public class CustomAnchorActivity extends BaseActivity {
         //设置16k采样率
         mTRTCCloud.setAudioQuality(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
         mTRTCCloud.enableCustomAudioCapture(true);
-        mTRTCCloud.enableCustomVideoCapture(true);
-        //美颜测试
-        TXBeautyManager beautyManager = mTRTCCloud.getBeautyManager();
-        beautyManager.setBeautyStyle(0);
-        beautyManager.setBeautyLevel(9);
-        beautyManager.setWhitenessLevel(9);
-        beautyManager.setFilter(BitmapFactory.decodeResource(getResources(), R.drawable.beauty_filter_yuanqi));
-        beautyManager.setFilterStrength(1);
+        mTRTCCloud.enableCustomVideoCapture(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
 
         TRTCCloudDef.TRTCVideoEncParam encParam = new TRTCCloudDef.TRTCVideoEncParam();
         encParam.videoResolution = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_1280_720;
@@ -138,18 +130,21 @@ public class CustomAnchorActivity extends BaseActivity {
     视频自定义采集
      */
     private void customVideo() {
-        cameraEglSurfaceView.setVideoFrameReadListener(frame -> {
+        int cameraType = SPUtils.getInstance(this).getInt(Constant.CAMERA_TYPE, Constant.CAMERA_1);
+        mCustomCameraCapture = new CameraBuilder(this).setCameraID(cameraID).setCameraType(cameraType == Constant.CAMERA_1 ? CameraBuilder.CameraType.Camera1 : CameraBuilder.CameraType.Camera2).build();
+        mCustomCameraCapture.startCameraCapture((eglContext, textureId, width, height) -> {
             TRTCCloudDef.TRTCVideoFrame videoFrame = new TRTCCloudDef.TRTCVideoFrame();
             videoFrame.texture = new TRTCCloudDef.TRTCTexture();
-            videoFrame.texture.textureId = frame.textureId;
-            videoFrame.texture.eglContext10 = frame.eglContext;
-            videoFrame.width = frame.width;
-            videoFrame.height = frame.height;
+            videoFrame.texture.textureId = textureId;
+            videoFrame.texture.eglContext14 = eglContext;
+            videoFrame.width = width;
+            videoFrame.height = height;
             videoFrame.pixelFormat = TRTCCloudDef.TRTC_VIDEO_PIXEL_FORMAT_Texture_2D;
             videoFrame.bufferType = TRTCCloudDef.TRTC_VIDEO_BUFFER_TYPE_TEXTURE;
-            mTRTCCloud.sendCustomVideoData(videoFrame);
-
+            if (mTRTCCloud != null)
+                mTRTCCloud.sendCustomVideoData(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, videoFrame);
         });
+
         //自定义采集+SDK美颜测试
         TRTCRenderVideoFrame mCustomRender = new TRTCRenderVideoFrame(mUserId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
         mTRTCCloud.setLocalVideoRenderListener(TRTCCloudDef.TRTC_VIDEO_PIXEL_FORMAT_Texture_2D, TRTCCloudDef.TRTC_VIDEO_BUFFER_TYPE_TEXTURE, mCustomRender);
@@ -193,13 +188,14 @@ public class CustomAnchorActivity extends BaseActivity {
         }
         mTRTCCloud = null;
         TRTCCloud.destroySharedInstance();
+        mCustomCameraCapture.destroy();
     }
 
     public void exitRoom() {
         mTRTCCloud.stopLocalAudio();
         mTRTCCloud.stopLocalPreview();
         mTRTCCloud.exitRoom();
-        cameraEglSurfaceView.onDestroy();
+        //cameraEglSurfaceView.onDestroy();
     }
 
 
